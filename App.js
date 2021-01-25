@@ -1,27 +1,34 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
-
-class SayHello extends Component {
-  render(){
-    return (
-      <View>
-        <Text>Hello {this.props.name}</Text>
-      </View>
-    )
-  };
-}
+import { Text, View, TextInput, Button, FlatList } from 'react-native';
 
 class HelloWorldApp extends Component {
-  render(){
+  constructor(props) {
+      super(props);
+      this.state = {
+             newData: '',
+             text:''
+           }
+         }
+
+handleTextInput = (text) =>
+{
+  this.setState({newData: text})
+}
+
+handleButtonPress()
+{
+  this.setState({text: this.state.newData})
+}
+
+render(){
     return (
       <View>
-        <SayHello name="Ash" />
-        <SayHello name="Josh" />
-        <SayHello name="Sarah" />
+        <TextInput placeholder="Type here!" onChangeText={this.handleTextInput} value={this.state.newData} />
+        <Button title="Add" onPress={() => this.handleButtonPress()}/>
+        <FlatList data={this.state.text} renderItem = {item => (<Text>{this.state.text}</Text>)} />
       </View>
     );
   }
 }
-
 
 export default HelloWorldApp
