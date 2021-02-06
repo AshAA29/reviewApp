@@ -1,34 +1,23 @@
+import 'react-native-gesture-handler';
 import React, { Component } from 'react';
-import { Text, View, TextInput, Button, FlatList } from 'react-native';
+import { FlatList, ActivityIndicator, Text, View  } from 'react-native';
 
-class HelloWorldApp extends Component {
-  constructor(props) {
-      super(props);
-      this.state = {
-             newData: '',
-             text:''
-           }
-         }
+//  import Main from './components/screens/Main';
+//  import Boilerplate from './components/screens/Boilerplate';
+//  import ShoppingNav from './components/screens/ShoppingNav';
+import CoffeeInitialNav from './components/screens/CoffeeInitialNav';
+// import Geoloc from './components/screens/Geoloc';
+// import Camera from './components/screens/Camera';
 
-handleTextInput = (text) =>
-{
-  this.setState({newData: text})
-}
-
-handleButtonPress()
-{
-  this.setState({text: this.state.newData})
-}
-
-render(){
+class App extends Component {
+  constructor(props){
+     super(props);
+   }
+  render() {
     return (
-      <View>
-        <TextInput placeholder="Type here!" onChangeText={this.handleTextInput} value={this.state.newData} />
-        <Button title="Add" onPress={() => this.handleButtonPress()}/>
-        <FlatList data={this.state.text} renderItem = {item => (<Text>{this.state.text}</Text>)} />
-      </View>
+      <CoffeeInitialNav />
     );
   }
 }
 
-export default HelloWorldApp
+export default App;
