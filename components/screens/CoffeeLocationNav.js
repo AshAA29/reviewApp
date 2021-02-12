@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import LocationHomePage from './LocationHomePage';
 import LocationReviewMaker from './LocationReviewMaker';
+
 const Stack = createStackNavigator();
 
 export default function coffeeLocationNav() {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View, Button, StyleSheet, Alert, TouchableOpacity , FlatList, ActivityIndicator} from 'react-native';
+import { Text, TextInput, View, Button, StyleSheet, Alert, TouchableOpacity ,Image, FlatList, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import StarRating from 'react-native-star-rating';
@@ -10,7 +10,8 @@ class Locationscreen extends Component{
     super(props)
     this.state ={
       isLoading: true,
-      locationData: []
+      locationData: [],
+      isliked:true,
     }
   }
 
@@ -44,6 +45,60 @@ class Locationscreen extends Component{
       }
     }
 
+    likeReview = async (revId) =>{
+      var token = await AsyncStorage.getItem('@session_token')
+      const {locID} = this.props.route.params
+      return fetch('http://10.0.2.2:3333/api/1.0.0/location/' +locID+ '/review/'+ revId + '/like', {
+        method: 'POST',
+        headers: { 'Content-Type' : 'application/json',
+                  'X-Authorization': token
+      }
+      })
+      .then((response) => {
+        if (response.status === 404) {
+          throw 'Not Found'
+        }
+        if (response.status === 400) {
+          Alert.alert("Bad request");
+        }
+        else if (response.status === 200) {
+          Alert.alert("Review Liked");
+          this.props.navigation.replace('LocationHomePage');
+        }
+
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    }
+
+    favLoc = async () =>{
+      var token = await AsyncStorage.getItem('@session_token')
+      const {locID} = this.props.route.params
+      return fetch('http://10.0.2.2:3333/api/1.0.0/location/' +locID+ '/favourite', {
+        method: 'POST',
+        headers: { 'Content-Type' : 'application/json',
+                  'X-Authorization': token
+      }
+      })
+      .then((response) => {
+        if (response.status === 404) {
+          throw 'Not Found'
+        }
+        if (response.status === 400) {
+          Alert.alert("Bad request");
+        }
+        else if (response.status === 200) {
+          Alert.alert("Location Favourited");
+          this.props.navigation.replace('LocationHomePage');
+        }
+
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    }
+
 
     listEmpty = () => {
     return (
@@ -54,6 +109,8 @@ class Locationscreen extends Component{
         </View>
     )
   }
+
+
 
   render(){
     const {locID} = this.props.route.params
@@ -111,7 +168,18 @@ class Locationscreen extends Component{
                   starSize={10}
                 />
                </View>
+
+               <View style={styles.stars}>
+               <TouchableOpacity
+                   onPress = {() => this.favLoc()}>
+                   <Ionicons name="ios-heart-outline" size={15} />
+                </TouchableOpacity>
+                <Text > Click the heart to Favourite!</Text>
+               </View>
+
             </View>
+
+
 
             <View>
             <TouchableOpacity
@@ -120,6 +188,8 @@ class Locationscreen extends Component{
 
              </TouchableOpacity>
             </View>
+
+
 
             <View>
             <Text></Text>
@@ -175,10 +245,27 @@ class Locationscreen extends Component{
                       />
                      </View>
                      <Text >Review Comments:  {item.review_body}</Text>
-                     <View style={styles.stars}>
-                     <Ionicons name="ios-thumbs-up-outline" size={15} />
-                     <Text > Likes: {item.likes}</Text>
+
+                     <View style={{justifyContent: 'center', alignItems: 'center',marginTop: 16,}}>
+                     <Image
+                     source={{
+                       uri: 'http://10.0.2.2:3333/api/1.0.0/location/'+ locID + '/review/'+ item.review_id +'/photo'}}
+                     style={{ width: 150, height: 150 }}
+                     />
                      </View>
+
+                     <View style={styles.stars}>
+                     <TouchableOpacity
+                         onPress = {() => this.likeReview(item.review_id)}>
+                         <Ionicons name="ios-thumbs-up-outline" size={15} />
+                      </TouchableOpacity>
+                      <Text > Likes: {item.likes}</Text>
+                     </View>
+
+
+
+
+
                   </View>
                 </>
                 )

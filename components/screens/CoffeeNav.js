@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import CoffeeHomeScreen from './CoffeeHomeScreen';
 import CoffeeProfileNav from './CoffeeProfileNav';
+import CoffeeActivityNav from './CoffeeActivityNav'
 
 const Tab = createBottomTabNavigator();
 
@@ -26,10 +27,10 @@ export default function secondaryNav(){
                 ? 'ios-person-circle'
                 : 'ios-person-circle-outline';
             }
-            if (route.name === 'ShoppingEdit') {
+            if (route.name === 'MyPicks') {
               iconName = focused
-                ? 'ios-create'
-                : 'ios-create-outline';
+                ? 'ios-heart-circle'
+                : 'ios-heart-circle-outline';
             }
 
 
@@ -38,12 +39,13 @@ export default function secondaryNav(){
           },
         })}
         tabBarOptions={{
-          activeTintColor: 'tomato',
+          activeTintColor: 'purple',
           inactiveTintColor: 'gray',
         }}
       >
             <Tab.Screen name="Home" component={CoffeeHomeScreen} />
             <Tab.Screen name="Profile" component={CoffeeProfileNav} />
+            <Tab.Screen name="MyPicks" component={CoffeeActivityNav} />
         </Tab.Navigator>
   );
 }
