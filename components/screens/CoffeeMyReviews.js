@@ -11,13 +11,10 @@ class coffeeMyReviews extends Component {
       isLoading: true,
       userData: [],
       imageTemp:[],
-      displayImage:true,
+      imgRefresh:true
     }
   }
 
-  onErrorLoadingImage = () => {
-    this.setState({displayImage:false})
-  }
 
   getData = async () =>{
     var token = await AsyncStorage.getItem('@session_token')
@@ -103,6 +100,7 @@ class coffeeMyReviews extends Component {
     Alert.alert(item.toString());
   }
 
+
   listEmpty = () => {
   return (
       <View style={styles.notfound}>
@@ -113,18 +111,12 @@ class coffeeMyReviews extends Component {
   )
 }
 
-imageTest = (locID,revID) =>{
-  return(
-    <View style={{justifyContent: 'center', alignItems: 'center',marginTop: 16}}>
-    <Image
-    source={{
-      uri: 'http://10.0.2.2:3333/api/1.0.0/location/'+ locID + '/review/'+ revID +'/photo',
-      method:'GET'
-    }}
-    style={{ width: 80, height: 80 }}
-    />
-    </View>
-  )
+handleRef = () => {
+this.setState({imgRefresh: false})
+}
+
+cancelRef = () => {
+<Image source={{uri: 'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'}} style={{width: 0,  height: 0}} />
 }
 
 
@@ -150,115 +142,149 @@ render() {
       extraData={this.state.userData.reviews}
       ListEmptyComponent={this.listEmpty}
       keyExtractor={(item,index) =>"" + index}
-      renderItem={({item}) => {
-        return(
+      renderItem={({item}) =>
+        (
         <>
-
         <View style={styles.locations}>
+         <Text style={styles.btn}>{item.location.location_name}</Text>
+         <Text >Location: {item.location.location_town}</Text>
 
-
-
-             <Text style={styles.btn}>{item.location.location_name}</Text>
-             <Text >Location: {item.location.location_town}</Text>
-
-             <View style={styles.stars}>
-             <Text >Average Overall Rating:  </Text>
-               <StarRating
-                  disabled={false}
-                  maxStars={5}
-                  rating={item.review.overall_rating}
-                  starSize={10}
-                />
-              </View>
-
-            <View style={styles.stars}>
-             <Text >Average Price Rating:  </Text>
-             <StarRating
-                disabled={false}
-                maxStars={5}
-                rating={item.review.price_rating}
-                starSize={10}
-              />
-              </View>
-
-              <View style={styles.stars}>
-             <Text >Average Quality Rating:  </Text>
-             <StarRating
-                disabled={false}
-                maxStars={5}
-                rating={item.review.quality_rating}
-                starSize={10}
-              />
-             </View>
-
-             <View style={styles.stars}>
-             <Text >Average Clenliness Rating:  </Text>
-             <StarRating
-                disabled={false}
-                maxStars={5}
-                rating={item.review.clenliness_rating}
-                starSize={10}
-              />
-             </View>
-
-             <Text >Review Comments:  {item.review.review_body}</Text>
-             <View style={styles.stars}>
-                 <Ionicons name="ios-thumbs-up-outline" size={15} />
-              <Text > Likes: {item.review.likes}</Text>
-             </View>
-
-
-             <View style={{justifyContent: 'center', alignItems: 'center',marginTop: 16}}>
-             <Image
-             source={{uri: 'http://10.0.2.2:3333/api/1.0.0/location/'+ item.location.location_id + '/review/'+ item.review.review_id +'/photo'}}
-             style={{ width: 80, height: 80 }}
-             />
-             </View>
-
-             <View>
-             <TouchableOpacity
-                 onPress = {() => this.props.navigation.navigate('LocationCamera',{revID:item.review.review_id,locID:item.location.location_id})}>
-                 <Text style={styles.leaveReview}> Add a pic </Text>
-              </TouchableOpacity>
-              </View>
-
-              <View>
-              <TouchableOpacity
-                  onPress = {() =>this.deletePic(item.location.location_id,item.review.review_id)}>
-                  <Text style={styles.leaveReview}> Delete pic </Text>
-               </TouchableOpacity>
-               </View>
-
-              <View>
-              <TouchableOpacity
-                  onPress = {() => this.props.navigation.navigate('CoffeeMyReviewsEdit',{revID:item.review.review_id,locID:item.location.location_id})}>
-                  <Text style={styles.leaveReview}> Edit review </Text>
-               </TouchableOpacity>
-               </View>
-
-             <View>
-             <TouchableOpacity
-                 onPress = {() => this.deleteMyReviews(item.review.review_id,item.location.location_id)}>
-                 <Text style={styles.leaveReview}> Remove review </Text>
-              </TouchableOpacity>
-              </View>
-
-
-
+         <View style={styles.stars}>
+         <Text >Average Overall Rating:  </Text>
+           <StarRating
+              disabled={false}
+              maxStars={5}
+              rating={item.review.overall_rating}
+              starSize={10}
+            />
           </View>
+
+        <View style={styles.stars}>
+         <Text >Average Price Rating:  </Text>
+         <StarRating
+            disabled={false}
+            maxStars={5}
+            rating={item.review.price_rating}
+            starSize={10}
+          />
+          </View>
+
+          <View style={styles.stars}>
+         <Text >Average Quality Rating:  </Text>
+         <StarRating
+            disabled={false}
+            maxStars={5}
+            rating={item.review.quality_rating}
+            starSize={10}
+          />
+         </View>
+
+         <View style={styles.stars}>
+         <Text >Average Clenliness Rating:  </Text>
+         <StarRating
+            disabled={false}
+            maxStars={5}
+            rating={item.review.clenliness_rating}
+            starSize={10}
+          />
+         </View>
+
+         <Text >Review Comments:  {item.review.review_body}</Text>
+         <View style={styles.stars}>
+             <Ionicons name="ios-thumbs-up-outline" size={15} />
+          <Text > Likes: {item.review.likes}</Text>
+         </View>
+
+         <CostumImg item={item}/>
+
+         <View>
+         <TouchableOpacity
+             onPress = {() => this.props.navigation.navigate('LocationCamera',{revID:item.review.review_id,locID:item.location.location_id})}>
+             <Text style={styles.leaveReview}> Add a pic </Text>
+          </TouchableOpacity>
+          </View>
+
+          <View>
+          <TouchableOpacity
+              onPress = {() =>this.deletePic(item.location.location_id,item.review.review_id)}>
+              <Text style={styles.leaveReview}> Delete pic </Text>
+           </TouchableOpacity>
+           </View>
+
+          <View>
+          <TouchableOpacity
+              onPress = {() => this.props.navigation.navigate('CoffeeMyReviewsEdit',{revID:item.review.review_id,locID:item.location.location_id})}>
+              <Text style={styles.leaveReview}> Edit review </Text>
+           </TouchableOpacity>
+           </View>
+
+         <View>
+         <TouchableOpacity
+             onPress = {() => this.deleteMyReviews(item.review.review_id,item.location.location_id)}>
+             <Text style={styles.leaveReview}> Remove review </Text>
+          </TouchableOpacity>
+          </View>
+
+
+
+      </View>
         </>
-        )
-
-        }}
-
-
-
+      )}
     />
     </View>
   );
 }
 
 }
+
+
+
+
+class CostumImg extends Component {
+  constructor(props){
+    super(props);
+    this.state ={
+      display: true,
+    }
+  }
+
+  imgError = () =>{
+    this.setState({display:false})
+  }
+
+  render() {
+
+    return(
+
+      <>
+
+      {this.state.display?
+       (
+         <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 16}}>
+           <Image
+             source={{uri: 'http://10.0.2.2:3333/api/1.0.0/location/'+ this.props.item.location.location_id+ '/review/'+ this.props.item.review.review_id +'/photo?t=' + Date.now() }}
+             style={styles.tinyLogo}
+             onError={this.imgError}
+             />
+         </View>
+
+     ) : (
+       <View></View>
+     )
+   }
+
+      </>
+
+    )
+
+  }
+}
+
+
+
+
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -334,9 +360,10 @@ const styles = StyleSheet.create({
 
  },
  tinyLogo: {
-    width: 50,
-    height: 50,
+    width: 100,
+    height: 100,
   },
+
 });
 
 export default coffeeMyReviews

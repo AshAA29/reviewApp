@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View, Button, StyleSheet, Alert, TouchableOpacity , FlatList, ActivityIndicator} from 'react-native';
+import { Text, TextInput, View, Button, StyleSheet, Alert, TouchableOpacity , FlatList, ActivityIndicator, Image} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import StarRating from 'react-native-star-rating';
@@ -101,8 +101,7 @@ class coffeeLikes extends Component {
         extraData={this.state.userData.liked_reviews}
         ListEmptyComponent={this.listEmpty}
         keyExtractor={(item,index) =>"" + index}
-        renderItem={({item}) => {
-          return(
+        renderItem={({item}) => (
           <>
 
           <View style={styles.locations}>
@@ -154,6 +153,8 @@ class coffeeLikes extends Component {
                 <Text > Likes: {item.review.likes}</Text>
                </View>
 
+               <CostumImg item={item}/>
+
                <View>
                <TouchableOpacity
                    onPress = {() => this.dislikeReview(item.review.review_id,item.location.location_id)}>
@@ -164,7 +165,7 @@ class coffeeLikes extends Component {
           </>
           )
 
-          }}
+          }
 
 
 
@@ -174,6 +175,49 @@ class coffeeLikes extends Component {
   }
 
 }
+
+
+class CostumImg extends Component {
+  constructor(props){
+    super(props);
+    this.state ={
+      display: true,
+    }
+  }
+
+  imgError = () =>{
+    this.setState({display:false})
+  }
+
+  render() {
+
+    return(
+
+      <>
+
+      {this.state.display?
+       (
+         <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 16}}>
+           <Image
+             source={{uri: 'http://10.0.2.2:3333/api/1.0.0/location/'+ this.props.item.location.location_id+ '/review/'+ this.props.item.review.review_id +'/photo?t=' + Date.now() }}
+             style={styles.tinyLogo}
+             onError={this.imgError}
+             />
+         </View>
+
+     ) : (
+       <View></View>
+     )
+   }
+
+      </>
+
+    )
+
+  }
+}
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -247,7 +291,11 @@ const styles = StyleSheet.create({
    fontSize: 16,
    fontWeight: "bold"
 
- }
+ },
+ tinyLogo: {
+    width: 100,
+    height: 100,
+  }
 });
 
 export default coffeeLikes

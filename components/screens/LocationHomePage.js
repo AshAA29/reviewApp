@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View, Button, StyleSheet, Alert, TouchableOpacity ,Image, FlatList, ActivityIndicator} from 'react-native';
+import { Text, TextInput, View, Button, StyleSheet, Alert, TouchableOpacity ,Image, FlatList, ActivityIndicator,Datr} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import StarRating from 'react-native-star-rating';
@@ -12,6 +12,7 @@ class Locationscreen extends Component{
       isLoading: true,
       locationData: [],
       isliked:true,
+      timestamp:Date.now()
     }
   }
 
@@ -114,6 +115,7 @@ class Locationscreen extends Component{
 
   render(){
     const {locID} = this.props.route.params
+
     if(this.state.isLoading){
       return(
         <View>
@@ -246,13 +248,7 @@ class Locationscreen extends Component{
                      </View>
                      <Text >Review Comments:  {item.review_body}</Text>
 
-                     <View style={{justifyContent: 'center', alignItems: 'center',marginTop: 16,}}>
-                     <Image
-                     source={{
-                       uri: 'http://10.0.2.2:3333/api/1.0.0/location/'+ locID + '/review/'+ item.review_id +'/photo'}}
-                     style={{ width: 150, height: 150 }}
-                     />
-                     </View>
+                    <CostumImg item={item} locationID={locID} />
 
                      <View style={styles.stars}>
                      <TouchableOpacity
@@ -278,6 +274,46 @@ class Locationscreen extends Component{
 
       </View>
     );
+  }
+}
+
+class CostumImg extends Component {
+  constructor(props){
+    super(props);
+    this.state ={
+      display: true,
+    }
+  }
+
+  imgError = () =>{
+    this.setState({display:false})
+  }
+
+  render() {
+
+    return(
+
+      <>
+
+      {this.state.display?
+       (
+         <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 16}}>
+           <Image
+             source={{uri: 'http://10.0.2.2:3333/api/1.0.0/location/'+this.props.locationID+ '/review/'+ this.props.item.review_id +'/photo?t=' + Date.now() }}
+             style={styles.tinyLogo}
+             onError={this.imgError}
+             />
+         </View>
+
+     ) : (
+       <View></View>
+     )
+   }
+
+      </>
+
+    )
+
   }
 }
 
@@ -354,7 +390,11 @@ const styles = StyleSheet.create({
    fontSize: 16,
    fontWeight: "bold"
 
- }
+ },
+ tinyLogo: {
+    width: 100,
+    height: 100,
+  }
 });
 
 export default Locationscreen

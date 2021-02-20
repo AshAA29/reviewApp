@@ -155,6 +155,8 @@ class coffeeFavourites extends Component {
                    <Text style={styles.leaveReview}> Remove from favourite places </Text>
                 </TouchableOpacity>
                 </View>
+
+
             </View>
           </>
           )
@@ -169,6 +171,9 @@ class coffeeFavourites extends Component {
   }
 
 }
+
+
+
 
 const styles = StyleSheet.create({
   container: {
