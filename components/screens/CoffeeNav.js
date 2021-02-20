@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CoffeeHomeScreen from './CoffeeHomeScreen';
 import CoffeeProfileNav from './CoffeeProfileNav';
 import CoffeeActivityNav from './CoffeeActivityNav'
+import CoffeeMap from './CoffeeMap'
 
 const Tab = createBottomTabNavigator();
 
@@ -32,9 +33,12 @@ export default function secondaryNav(){
                 ? 'ios-heart-circle'
                 : 'ios-heart-circle-outline';
             }
+            if (route.name === 'Maps') {
+              iconName = focused
+                ? 'ios-map'
+                : 'ios-map-outline';
+            }
 
-
-            // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
         })}
@@ -46,6 +50,7 @@ export default function secondaryNav(){
             <Tab.Screen name="Home" component={CoffeeHomeScreen} />
             <Tab.Screen name="Profile" component={CoffeeProfileNav} />
             <Tab.Screen name="MyPicks" component={CoffeeActivityNav} />
+            <Tab.Screen name="Maps" component={CoffeeMap} />
         </Tab.Navigator>
   );
 }

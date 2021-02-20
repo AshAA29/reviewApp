@@ -22,34 +22,49 @@ class coffeeLogin extends Component {
   }
 
   login = async () => {
-      return fetch("http://10.0.2.2:3333/api/1.0.0/user/login",
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.state)
-      })
-      .then((response) => {
-        if(response.status === 200)
+      let loginDetails = {};
+
+      if(this.state.email.indexOf('@') === -1){
+        Alert.alert("Invalid Email Format");
+      }
+      else{
+        loginDetails['email'] = this.state.email;
+        loginDetails['password'] = this.state.password;
+
+        return fetch("http://10.0.2.2:3333/api/1.0.0/user/login",
         {
-          return response.json()
-        }
-        else if (response.status === 400) {
-          throw 'Invalid username or password entered'
-        }
-        else{
-          throw 'Something doesnt seem right'
-        }
-      })
-      .then(async (responseJson) => {
-        await AsyncStorage.setItem('@session_token', responseJson.token);
-        await AsyncStorage.setItem('@user_id', responseJson.id.toString());
-        this.setState({email: ""});
-        this.setState({password: ""});
-        this.props.navigation.navigate('CoffeeNav');
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(loginDetails)
+        })
+        .then((response) => {
+          if(response.status === 200)
+          {
+            return response.json()
+          }
+          else if (response.status === 400) {
+
+            this.props.navigation.replace('CoffeeLogin');
+          }
+          else{
+            throw 'Something doesnt seem right'
+          }
+        })
+        .then(async (responseJson) => {
+          await AsyncStorage.setItem('@session_token', responseJson.token);
+          await AsyncStorage.setItem('@user_id', responseJson.id.toString());
+          this.setState({email: ""});
+          this.setState({password: ""});
+          this.props.navigation.navigate('CoffeeNav');
+        })
+
+        .catch((error) => {
+            Alert.alert("Invalid username or password entered");
+        });
+      }
+
+
+
     }
 
 

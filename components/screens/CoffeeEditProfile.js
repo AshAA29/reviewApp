@@ -62,15 +62,27 @@ class coffeeEditProfile extends Component {
     var token = await AsyncStorage.getItem('@session_token')
     let reply = {};
 
-    if(this.state.first_name != this.state.profileData.first_nameOG){
+    if(this.state.first_name.trim().length===0){
+      reply['first_name'] = this.state.profileData.first_nameOG;
+    }
+    else{
       reply['first_name'] = this.state.first_name;
     }
-    if(this.state.last_name != this.state.profileData.last_nameOG){
+
+    if(this.state.last_name.trim().length===0){
+      reply['last_name'] = this.state.profileData.last_nameOG;
+    }
+    else {
       reply['last_name'] = this.state.last_name;
     }
-    if(this.state.email != this.state.profileData.emailOG){
+
+    if(this.state.email.trim().length===0){
+      reply['email'] = this.state.profileData.emailOG;
+    }
+    else {
       reply['email'] = this.state.email;
     }
+
 
 
     return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + userID, {
@@ -85,6 +97,7 @@ class coffeeEditProfile extends Component {
         throw 'Not Found'
       }
       if (response.status === 400) {
+
         Alert.alert("Bad request");
       }
       else if (response.status === 200) {

@@ -9,8 +9,13 @@ class coffeeHomeScreen extends Component {
     super(props);
     this.state ={
       isLoading: true,
-      locationData: []
+      locationData: [],
+      search: ''
     }
+  }
+
+  handleInputsearch = (search) => {
+  this.setState({search: search})
   }
 
   getData = async () =>{
@@ -55,63 +60,127 @@ class coffeeHomeScreen extends Component {
     }
     return (
       <View style={styles.container}>
+
+      <TextInput style={styles.items} placeholder="Enter Location to search..." onChangeText={this.handleInputsearch} value={this.state.search} />
+
       <FlatList
         data={this.state.locationData}
         extraData={this.state.locationData}
         keyExtractor={({location_id},index) => location_id.toString()}
         renderItem={({item}) => {
-          return(
-          <>
 
-          <View style={styles.locations}>
-           <TouchableOpacity
-               onPress = {() => this.props.navigation.navigate('CoffeeLocationNav', {screen: 'LocationHomePage',params: { locID: item.location_id }})}>
-               <Text style={styles.btn}>{item.location_name}</Text>
-               <Text >Location: {item.location_town}</Text>
+          if(this.state.search.trim().length===0){
+            return(
+            <>
 
-               <View style={styles.stars}>
-               <Text >Average Overall Rating:  </Text>
+            <View style={styles.locations}>
+             <TouchableOpacity
+                 onPress = {() => this.props.navigation.navigate('CoffeeLocationNav', {screen: 'LocationHomePage',params: { locID: item.location_id }})}>
+                 <Text style={styles.btn}>{item.location_name}</Text>
+                 <Text >Location: {item.location_town}</Text>
+
+                 <View style={styles.stars}>
+                 <Text >Average Overall Rating:  </Text>
+                   <StarRating
+                      disabled={false}
+                      maxStars={5}
+                      rating={item.avg_overall_rating}
+                      starSize={10}
+                    />
+                  </View>
+                <View style={styles.stars}>
+                 <Text >Average Price Rating:  </Text>
                  <StarRating
                     disabled={false}
                     maxStars={5}
-                    rating={item.avg_overall_rating}
+                    rating={item.avg_price_rating}
                     starSize={10}
                   />
-                </View>
-              <View style={styles.stars}>
-               <Text >Average Price Rating:  </Text>
-               <StarRating
-                  disabled={false}
-                  maxStars={5}
-                  rating={item.avg_price_rating}
-                  starSize={10}
-                />
-                </View>
+                  </View>
 
+                  <View style={styles.stars}>
+                 <Text >Average Quality Rating:  </Text>
+                 <StarRating
+                    disabled={false}
+                    maxStars={5}
+                    rating={item.avg_quality_rating}
+                    starSize={10}
+                  />
+                 </View>
+
+                 <View style={styles.stars}>
+                 <Text >Average Clenliness Rating:  </Text>
+                 <StarRating
+                    disabled={false}
+                    maxStars={5}
+                    rating={item.avg_clenliness_rating}
+                    starSize={10}
+                  />
+                 </View>
+
+              </TouchableOpacity>
+              </View>
+            </>
+            )
+          }
+
+          else if(item.location_name.toLowerCase().includes(this.state.search.toLowerCase())){
+            return(
+            <>
+
+            <View style={styles.locations}>
+             <TouchableOpacity
+                 onPress = {() => this.props.navigation.navigate('CoffeeLocationNav', {screen: 'LocationHomePage',params: { locID: item.location_id }})}>
+                 <Text style={styles.btn}>{item.location_name}</Text>
+                 <Text >Location: {item.location_town}</Text>
+
+                 <View style={styles.stars}>
+                 <Text >Average Overall Rating:  </Text>
+                   <StarRating
+                      disabled={false}
+                      maxStars={5}
+                      rating={item.avg_overall_rating}
+                      starSize={10}
+                    />
+                  </View>
                 <View style={styles.stars}>
-               <Text >Average Quality Rating:  </Text>
-               <StarRating
-                  disabled={false}
-                  maxStars={5}
-                  rating={item.avg_quality_rating}
-                  starSize={10}
-                />
-               </View>
+                 <Text >Average Price Rating:  </Text>
+                 <StarRating
+                    disabled={false}
+                    maxStars={5}
+                    rating={item.avg_price_rating}
+                    starSize={10}
+                  />
+                  </View>
 
-               <View style={styles.stars}>
-               <Text >Average Clenliness Rating:  </Text>
-               <StarRating
-                  disabled={false}
-                  maxStars={5}
-                  rating={item.avg_clenliness_rating}
-                  starSize={10}
-                />
-               </View>
+                  <View style={styles.stars}>
+                 <Text >Average Quality Rating:  </Text>
+                 <StarRating
+                    disabled={false}
+                    maxStars={5}
+                    rating={item.avg_quality_rating}
+                    starSize={10}
+                  />
+                 </View>
 
-            </TouchableOpacity>
-            </View>
-          </>
-          )
+                 <View style={styles.stars}>
+                 <Text >Average Clenliness Rating:  </Text>
+                 <StarRating
+                    disabled={false}
+                    maxStars={5}
+                    rating={item.avg_clenliness_rating}
+                    starSize={10}
+                  />
+                 </View>
+
+              </TouchableOpacity>
+              </View>
+            </>
+            )
+          }
+
+
+
 
           }}
 
@@ -169,6 +238,18 @@ const styles = StyleSheet.create({
    alignItems: 'center',
    flexDirection: 'row',
 
+ },
+ btn2: {
+   marginTop: 2,
+   paddingVertical: 8,
+   borderWidth: 4,
+   borderColor: "#F6F7EB",
+   borderRadius: 6,
+   backgroundColor: "#5C415D",
+   color: "#F6F7EB",
+   textAlign: "center",
+   fontSize: 16,
+   fontWeight: "bold"
  }
 });
 

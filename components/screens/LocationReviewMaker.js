@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, TextInput, View, Button, StyleSheet, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Filter from 'bad-words';
 
 class locationReviewMaker extends Component {
   constructor(props){
@@ -15,6 +16,8 @@ class locationReviewMaker extends Component {
       review_body:''
     }
   }
+
+
 
   handleOverallRating = (overall_rating) => {
   this.setState({overall_rating: overall_rating})
@@ -32,17 +35,19 @@ class locationReviewMaker extends Component {
   this.setState({review_body: review_body})
   }
 
-
-
     postReview = async () =>{
       var token = await AsyncStorage.getItem('@session_token')
       const {locID} = this.props.route.params
       let review = {};
+
+      var filter = new Filter();
+      filter.addWords('tea', 'cakes', 'pastries');
+
       review['overall_rating']=parseInt(this.state.overall_rating)
       review['price_rating']=parseInt(this.state.price_rating)
       review['quality_rating']=parseInt(this.state.quality_rating)
       review['clenliness_rating']=parseInt(this.state.clenliness_rating)
-      review['review_body']=this.state.review_body
+      review['review_body']=filter.clean(this.state.review_body)
 
       return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + locID +'/review', {
         method: 'POST',
@@ -72,6 +77,8 @@ class locationReviewMaker extends Component {
 
   render() {
     const {locID} = this.props.route.params
+
+
 
     return (
       <View style={styles.container}>

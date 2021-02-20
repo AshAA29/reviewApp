@@ -17,6 +17,7 @@
     "@react-navigation/drawer": "^5.12.3",
     "@react-navigation/native": "^5.9.2",
     "@react-navigation/stack": "^5.14.2",
+    "bad-words": "^3.0.4",
     "native-base": "^2.15.2",
     "react": "16.13.1",
     "react-native": "^0.63.4",
@@ -30,7 +31,9 @@
     "react-native-screens": "^2.17.1",
     "react-native-star-rating": "^1.1.0",
     "react-native-vector-icons": "^8.0.0",
-    "save": "^2.4.0"
+    "save": "^2.4.0",
+    "badwords-list": "^1.0.0",
+    "bad-words": "^3.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
