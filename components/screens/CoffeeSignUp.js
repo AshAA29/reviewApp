@@ -33,7 +33,7 @@ class coffeSignUp extends Component {
     this.setState({ password: password });
   };
 
-  addItem() {
+  addUser() {
     return fetch("http://10.0.2.2:3333/api/1.0.0/user", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -45,7 +45,13 @@ class coffeSignUp extends Component {
       }),
     })
       .then((response) => {
-        this.props.navigation.navigate("CoffeeLogin");
+        if (response.status === 201) {
+          this.props.navigation.navigate("CoffeeLogin");
+        } else if (response.status === 400) {
+          this.props.navigation.replace("CoffeeLogin");
+        } else {
+          throw "Something doesnt seem right";
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -80,7 +86,7 @@ class coffeSignUp extends Component {
           onChangeText={this.handleInputPassword}
           value={this.state.password}
         />
-        <TouchableOpacity onPress={() => this.addItem()}>
+        <TouchableOpacity onPress={() => this.addUser()}>
           <Text style={styles.btn}> Sign Up </Text>
         </TouchableOpacity>
       </View>
