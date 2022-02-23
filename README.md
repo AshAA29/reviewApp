@@ -21,4 +21,4 @@ to consistently implement the Style.
 3.All of the endpoints have been implemened and can be seen. (Development-only endpoints like reset and resample are not present in the code as the app user should never be able to access them).
 
 ## Demo
-There is a file in the repository showing the app in usage.
+There is a file in the repository showing the app in usage. "App Screencast"
