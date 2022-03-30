@@ -7,7 +7,7 @@ https://github.com/AshAA29/reviewApp.git
 
 
 ## Usage
-The node_mudules are found of github but have been deleted for this submission. Version Control is also present and be seen in my repositories commit history in github.
+The node_mudules are found of github but have been deleted for this submission. Version Control is also present and can be seen in my repositories commit history in github.
 
 ## Code Style Guide
 I have used JavaScript Standard as the code style to follow. I have used linters in the Atom file editor
